@@ -6,6 +6,16 @@ import { useRouter } from "next/navigation";
 const API_BASE = "http://localhost:999";
 const ADMIN_EMAIL = "jurhee@gmail.com";
 
+function setAdminCookie() {
+  document.cookie = "auth=1; path=/; max-age=604800; samesite=lax";
+  document.cookie = "user_role=admin; path=/; max-age=604800; samesite=lax";
+}
+
+function clearAuthCookies() {
+  document.cookie = "auth=; path=/; max-age=0; samesite=lax";
+  document.cookie = "user_role=; path=/; max-age=0; samesite=lax";
+}
+
 export default function AdminDashboard() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState(null);
@@ -73,14 +83,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const rawUser = localStorage.getItem("currentUser");
     if (!rawUser) {
-      const guestAdmin = {
-        id: "dev-admin",
-        email: "jurhee@gmail.com",
-        role: "admin",
-      };
-      localStorage.setItem("currentUser", JSON.stringify(guestAdmin));
-      setCurrentUser(guestAdmin);
-      fetchCategories();
+      router.push("/login");
       return;
     }
 
@@ -96,6 +99,7 @@ export default function AdminDashboard() {
 
     const safeAdminUser = user.role === "admin" ? user : { ...user, role: "admin" };
     localStorage.setItem("currentUser", JSON.stringify(safeAdminUser));
+    setAdminCookie();
     setCurrentUser(safeAdminUser);
     fetchCategories();
   }, [fetchCategories, router]);
@@ -279,8 +283,9 @@ export default function AdminDashboard() {
 
   const confirmLogout = () => {
     localStorage.removeItem("currentUser");
+    clearAuthCookies();
     setShowLogoutConfirm(false);
-    router.push("/main");
+    router.push("/login");
   };
 
   return (

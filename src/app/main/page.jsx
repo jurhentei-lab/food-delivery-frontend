@@ -5,6 +5,11 @@ import { useRouter } from "next/navigation";
 
 const API_BASE = "http://localhost:999";
 
+function clearAuthCookies() {
+  document.cookie = "auth=; path=/; max-age=0; samesite=lax";
+  document.cookie = "user_role=; path=/; max-age=0; samesite=lax";
+}
+
 export default function RestaurantPage() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState(null);
@@ -60,17 +65,12 @@ export default function RestaurantPage() {
   useEffect(() => {
     const rawUser = localStorage.getItem("currentUser");
     if (!rawUser) {
-      const guestUser = {
-        id: "dev-admin",
-        email: "jurhee@gmail.com",
-        role: "admin",
-      };
-      localStorage.setItem("currentUser", JSON.stringify(guestUser));
-      setCurrentUser(guestUser);
-    } else {
-      const user = JSON.parse(rawUser);
-      setCurrentUser(user);
+      router.push("/login");
+      return;
     }
+
+    const user = JSON.parse(rawUser);
+    setCurrentUser(user);
 
     const savedLocation = localStorage.getItem("deliveryLocation") || "";
     setDeliveryLocation(savedLocation);
@@ -182,6 +182,7 @@ export default function RestaurantPage() {
 
   const confirmLogout = () => {
     localStorage.removeItem("currentUser");
+    clearAuthCookies();
     setShowLogoutConfirm(false);
     router.push("/login");
   };
