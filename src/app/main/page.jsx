@@ -2,8 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-
-const API_BASE = "http://localhost:999";
+import { API_BASE } from "../../lib/api-base";
 
 function clearAuthCookies() {
   document.cookie = "auth=; path=/; max-age=0; samesite=lax";

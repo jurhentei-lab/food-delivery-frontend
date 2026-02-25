@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { API_BASE } from "../../lib/api-base";
 
-const API_BASE = "http://localhost:999";
 const ADMIN_EMAIL = "jurhee@gmail.com";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 

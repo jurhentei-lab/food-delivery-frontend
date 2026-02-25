@@ -4,8 +4,7 @@ import axios from "axios";
 import { ChevronLeftIcon } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-const API_BASE = "http://localhost:999";
+import { API_BASE } from "../../lib/api-base";
 
 export default function Step2({ email, goBack }) {
   const router = useRouter();
@@ -73,11 +72,14 @@ export default function Step2({ email, goBack }) {
 
   return (
     <>
-      <ChevronLeftIcon className="cursor-pointer" onClick={goBack} />
+      <ChevronLeftIcon
+        className="cursor-pointer text-white"
+        onClick={goBack}
+      />
 
       <div className="flex flex-col gap-1">
         <p className="text-2xl font-semibold">Create a strong password</p>
-        <p className="text-[#71717A] text-sm">
+        <p className="text-sm text-slate-400">
           Create a strong password with letters, numbers.
         </p>
       </div>
@@ -88,7 +90,7 @@ export default function Step2({ email, goBack }) {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="border border-[#c9c9d3] rounded-md w-full h-10 px-3 text-sm"
+          className="h-10 w-full rounded-md border border-white/15 bg-white/5 px-3 text-sm text-white placeholder:text-slate-400"
         />
 
         <input
@@ -96,14 +98,15 @@ export default function Step2({ email, goBack }) {
           placeholder="Confirm"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
-          className="border border-[#c9c9d3] rounded-md w-full h-10 px-3 text-sm"
+          className="h-10 w-full rounded-md border border-white/15 bg-white/5 px-3 text-sm text-white placeholder:text-slate-400"
         />
 
-        <label className="flex items-center gap-2 text-sm cursor-pointer">
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-300">
           <input
             type="checkbox"
             checked={show}
             onChange={() => setShow(!show)}
+            className="accent-white"
           />
           Show password
         </label>
@@ -114,7 +117,7 @@ export default function Step2({ email, goBack }) {
         onClick={createUser}
         className={`flex justify-center items-center rounded-md w-full h-10 text-white font-medium ${
           !passwordMatch || loading
-            ? "bg-gray-200 cursor-not-allowed"
+            ? "bg-white/15 text-slate-400 cursor-not-allowed"
             : "bg-[#18181B]"
         }`}
       >
@@ -123,7 +126,7 @@ export default function Step2({ email, goBack }) {
       {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
 
       <div className="flex gap-2 text-sm">
-        <p className="text-[#71717A]">Already have an account?</p>
+        <p className="text-slate-400">Already have an account?</p>
         <p
           className="text-[#2563EB] cursor-pointer"
           onClick={() => router.push("/login")}
