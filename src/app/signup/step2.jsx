@@ -5,6 +5,7 @@ import { ChevronLeftIcon } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { API_BASE } from "../../lib/api-base";
+import { getAuthErrorMessage } from "../../lib/get-auth-error-message";
 
 export default function Step2({ email, goBack }) {
   const router = useRouter();
@@ -63,8 +64,12 @@ export default function Step2({ email, goBack }) {
       console.log("Амжилттай:", response.data);
       router.push("/login");
     } catch (error) {
-      console.error("Алдаа:", error.response?.data || error.message);
-      setErrorMessage(error.response?.data?.message || "Алдаа гарлаа!");
+      console.error("Signup error:", {
+        status: error?.response?.status,
+        data: error?.response?.data,
+        message: error?.message,
+      });
+      setErrorMessage(getAuthErrorMessage(error, "Бүртгүүлэх үед алдаа гарлаа."));
     } finally {
       setLoading(false);
     }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { API_BASE } from "../../lib/api-base";
+import { getAuthErrorMessage } from "../../lib/get-auth-error-message";
 
 const ADMIN_EMAIL = "jurhee@gmail.com";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -46,7 +47,12 @@ export default function LoginPage() {
         }
       }
     } catch (error) {
-      setErrorMessage(error.response?.data?.message || "Алдаа гарлаа!");
+      console.error("Login error:", {
+        status: error?.response?.status,
+        data: error?.response?.data,
+        message: error?.message,
+      });
+      setErrorMessage(getAuthErrorMessage(error, "Нэвтрэх үед алдаа гарлаа."));
     } finally {
       setLoading(false);
     }
